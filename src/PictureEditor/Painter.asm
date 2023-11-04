@@ -215,17 +215,6 @@ LOCAL MiddleX:DWORD, MiddleY:DWORD
 	ret
 IPaintTriangle1Frame ENDP
 
-;画多边形框函数
-IPaintPolygonFrame PROC, hdc:HDC
-	.IF WhetherDrawPolygon == 0
-		INVOKE IIncreasePolygonLine, hdc
-	.ELSEIF WhetherDrawPolygon == 1
-		INVOKE IIncreasePolygonLastLine, hdc
-		mov CurrentPointNum, 0
-	.ENDIF
-	ret
-IPaintPolygonFrame ENDP
-
 ;画矩形函数
 IPaintRectangle PROC, hdc:HDC
 	mov edx, DWORD PTR [CurrentPointListX]
@@ -313,73 +302,6 @@ IPaintEllipse PROC, hdc:HDC
 	mov CurrentPointNum, 0
 	ret
 IPaintEllipse ENDP
-
-;画多边形函数
-IPaintPolygon PROC, hdc:HDC
-	.IF WhetherDrawPolygon == 0
-		INVOKE IIncreasePolygonLine, hdc
-	.ELSEIF WhetherDrawPolygon == 1
-		INVOKE IIncreasePolygonLastLine, hdc
-		INVOKE IGetPolygonPointList
-		INVOKE Polygon, hdc, ADDR CurrentPointList, CurrentPointNum
-		mov CurrentPointNum, 0
-	.ENDIF
-	ret
-IPaintPolygon ENDP
-
-;在多边形绘制时增加一条线
-IIncreasePolygonLine PROC, hdc:HDC
-	push esi
-	mov esi, OFFSET CurrentPointListX
-	add esi, CurrentPointNum
-	add esi, CurrentPointNum
-	add esi, CurrentPointNum
-	add esi, CurrentPointNum
-	sub esi, 4
-	mov ebx, DWORD PTR [esi]
-	sub esi, 4
-	mov edx, DWORD PTR [esi]
-	mov esi, OFFSET CurrentPointListY
-	add esi, CurrentPointNum
-	add esi, CurrentPointNum
-	add esi, CurrentPointNum
-	add esi, CurrentPointNum
-	sub esi, 4
-	mov edi, DWORD PTR [esi]
-	sub esi, 4
-	mov ecx, DWORD PTR [esi]
-	INVOKE MoveToEx, hdc, edx, ecx, NULL
-	INVOKE LineTo, hdc, ebx, edi
-	INVOKE MoveToEx, hdc, 0, 0, NULL
-	ret
-IIncreasePolygonLine ENDP
-
-;在多边形绘制时增加最后一条线，连接开始和结束
-IIncreasePolygonLastLine PROC, hdc:HDC
-	push esi
-	mov esi, OFFSET CurrentPointListX
-	mov edx, DWORD PTR [esi]
-	add esi, CurrentPointNum
-	add esi, CurrentPointNum
-	add esi, CurrentPointNum
-	add esi, CurrentPointNum
-	sub esi, 4
-	mov ebx, DWORD PTR [esi]
-
-	mov esi, OFFSET CurrentPointListY
-	mov ecx, DWORD PTR [esi]
-	add esi, CurrentPointNum
-	add esi, CurrentPointNum
-	add esi, CurrentPointNum
-	add esi, CurrentPointNum
-	sub esi, 4
-	mov edi, DWORD PTR [esi]
-
-	INVOKE MoveToEx, hdc, edx, ecx, NULL
-	INVOKE LineTo, hdc, ebx, edi
-	INVOKE MoveToEx, hdc, 0, 0, NULL
-	ret
-IIncreasePolygonLastLine ENDP 
 
 ;获得当前点信息
 IGetCurrentPoint PROC, Place:DWORD

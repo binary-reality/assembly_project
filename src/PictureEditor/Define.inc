@@ -35,14 +35,7 @@ IErase                      PROTO :HDC
 IText                       PROTO :HDC,:HWND
 IPaintLine                  PROTO :HDC
 IPaintRectangleFrame        PROTO :HDC
-IPaintTriangle0Frame        PROTO :HDC
-IPaintTriangle1Frame        PROTO :HDC
-IPaintPolygonFrame          PROTO :HDC
 IPaintRectangle             PROTO :HDC
-IPaintTriangle0             PROTO :HDC
-IPaintTriangle1             PROTO :HDC
-IPaintEllipse               PROTO :HDC
-IPaintPolygon               PROTO :HDC
 
 ;绘图辅助函数
 IGetCurrentPoint        PROTO :DWORD ;获得当前点
@@ -50,12 +43,7 @@ IGetCurrentPoint        PROTO :DWORD ;获得当前点
 ;接近：eax = 1 否则eax = 0
 IJudgePolygonEnd            PROTO 
 IAddGraphPoint              PROTO ;将当前点存储进点列
-IGetPolygonPointList        PROTO ;根据点列得到绘制多边形的存储点列
-IGetTriangle0PointList      PROTO ;根据点列得到绘制直角三角形(上方)的存储点列
-IGetTriangle1PointList      PROTO ;根据点列得到绘制直角三角形(下方)的存储点列
 IGetRectanglePointList      PROTO ;根据点列得到绘制矩形的存储点列
-IIncreasePolygonLine        PROTO :HDC;在多边形绘制时增加一条线
-IIncreasePolygonLastLine    PROTO, :HDC;在多边形绘制时增加最后一条线，连接开始和结束
 ICallTextDialog              PROTO :HWND,:UINT,:WPARAM,:LPARAM ;弹出对话框输入文字
 IHandleTextDialog            PROTO :HWND,:WPARAM,:LPARAM ;将对话框输入文字存储，用于绘制
 
@@ -178,36 +166,14 @@ IHandlePainterDialog        PROTO :HWND, :WPARAM, :LPARAM
     ColorBrushMenuString     BYTE "填充", 0
     ColorPenMenuString       BYTE "线条", 0
 
-    FrameMenuString          BYTE "框架绘制工具", 0
+    FrameMenuString          BYTE "框架", 0
     LineMenuString           BYTE "直线", 0
     RectangleFrameMenuString BYTE "矩形框", 0
-    Triangle0FrameMenuString BYTE "直角三角形框（上方）", 0
-    Triangle1FrameMenuString BYTE "直角三角形框（下方）", 0
-    PolygonFrameMenuString   BYTE "多边形框", 0
-    BrushMenuString          BYTE "填充方式", 0
     SolidLineMenuString      BYTE "实线", 0
-    DashLineMenuString       BYTE "段线", 0
-    DotLineMenuString        BYTE "点线", 0
-    DashDotLineMenuString    BYTE "线、点",0
-    DashDot2LineMenuString   BYTE "线、点、点", 0
     PenColorMenuString       BYTE "线条颜色", 0
-    InsideFrameLineMenuString BYTE "内线宽", 0
-    SolidBrushMenuString     BYTE "实心", 0
-    BDiagonalBrushMenuString BYTE "右斜线", 0
-    FDiagonalBrushMenuString BYTE "左斜线", 0
-    DiagCrossBrushMenuString BYTE "斜交叉", 0
-    CrossBrushMenuString     BYTE "交叉", 0
-    HorizontalBrushMenuString BYTE "平行", 0
-    VerticalBrushMenuString   BYTE "竖直", 0
-
-    ToolMenuString           BYTE "图形绘制工具", 0
+    ToolMenuString           BYTE "图形", 0
     RectangleMenuString      BYTE "矩形", 0
-    Triangle0MenuString      BYTE "直角三角形（上方）", 0
-    Triangle1MenuString      BYTE "直角三角形（下方）", 0
-    EllipseMenuString        BYTE "椭圆", 0
-    PolygonMenuString        BYTE "多边形", 0
 
-    SettingsMenuString       BYTE "帮助", 0
 
     PenColor                 DWORD 0ffh
     PenStyle                 DWORD PS_SOLID ;PS_SOLID == 0

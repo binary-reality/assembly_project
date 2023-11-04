@@ -485,12 +485,6 @@ IHandlePaint PROC USES ecx,
 			INVOKE IPaintLine, ps.hdc
 		.ELSEIF ecx == IDM_MODE_RECTANGLE_FRAME
 			INVOKE IPaintRectangleFrame, ps.hdc
-		.ELSEIF ecx == IDM_MODE_TRIANGLE0_FRAME
-			INVOKE IPaintTriangle0Frame, ps.hdc
-		.ELSEIF ecx == IDM_MODE_TRIANGLE1_FRAME
-			INVOKE IPaintTriangle1Frame, ps.hdc
-		.ELSEIF ecx == IDM_MODE_POLYGON_FRAME
-			INVOKE IPaintPolygonFrame, ps.hdc
 		.ENDIF
 		INVOKE DeleteObject, hPen
 	.ELSEIF ecx == IDM_MODE_RECTANGLE || ecx==IDM_MODE_POLYGON || ecx==IDM_MODE_TRIANGLE0 || ecx==IDM_MODE_TRIANGLE1 || ecx==IDM_MODE_ELLIPSE
@@ -510,14 +504,6 @@ IHandlePaint PROC USES ecx,
 		pop ecx
 		.IF ecx == IDM_MODE_RECTANGLE
 			INVOKE IPaintRectangle, ps.hdc
-		.ELSEIF ecx == IDM_MODE_TRIANGLE0
-			INVOKE IPaintTriangle0, ps.hdc
-		.ELSEIF ecx == IDM_MODE_TRIANGLE1
-			INVOKE IPaintTriangle1, ps.hdc
-		.ELSEIF ecx == IDM_MODE_ELLIPSE
-			INVOKE IPaintEllipse, ps.hdc
-		.ELSEIF ecx == IDM_MODE_POLYGON
-			INVOKE IPaintPolygon, ps.hdc
 		.ENDIF
 		INVOKE DeleteObject, hBrush
 		INVOKE DeleteObject, hPen
