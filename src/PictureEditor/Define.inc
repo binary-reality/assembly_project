@@ -167,12 +167,13 @@ IHandlePainterDialog        PROTO :HWND, :WPARAM, :LPARAM
 
     DrawMenuString           BYTE "绘图", 0
     PaintMenuString          BYTE "画图", 0
+    EraserMenuString         BYTE "橡皮擦", 0
     EraseMenuString          BYTE "擦除", 0
+    EraserSizeString         BYTE "橡皮擦大小", 0
     TextMenuString           BYTE "文字", 0
-    FontMenuString           BYTE "字体", 0
+    InputTextString           BYTE "输入", 0
     FontChooseMenuString     BYTE "选择字体", 0 
     LineSizeString           BYTE "画笔宽度", 0
-    EraserSizeString         BYTE "橡皮擦大小", 0
     ColorMenuString          BYTE "颜色", 0
     ColorBrushMenuString     BYTE "填充", 0
     ColorPenMenuString       BYTE "线条", 0
@@ -189,6 +190,7 @@ IHandlePainterDialog        PROTO :HWND, :WPARAM, :LPARAM
     DotLineMenuString        BYTE "点线", 0
     DashDotLineMenuString    BYTE "线、点",0
     DashDot2LineMenuString   BYTE "线、点、点", 0
+    PenColorMenuString       BYTE "线条颜色", 0
     InsideFrameLineMenuString BYTE "内线宽", 0
     SolidBrushMenuString     BYTE "实心", 0
     BDiagonalBrushMenuString BYTE "右斜线", 0
@@ -228,8 +230,3 @@ IHandlePainterDialog        PROTO :HWND, :WPARAM, :LPARAM
     rsTitleName  db 1000 DUP (?)
     rsFile OPENFILENAME <>
 
-    ; 增加子菜单项的定义
-    TextSubMenuString       BYTE "文字", 0
-    EraserSubMenuString     BYTE "橡皮擦大小", 0
-    ColorSubMenuString      BYTE "颜色", 0
-    FontSubMenuString       BYTE "字体", 0
