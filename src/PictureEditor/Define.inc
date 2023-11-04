@@ -39,9 +39,6 @@ IPaintRectangle             PROTO :HDC
 
 ;绘图辅助函数
 IGetCurrentPoint        PROTO :DWORD ;获得当前点
-;判断多边形是否绘制完毕--已经有三个点以上，最后一个点和第一个点接近重合.
-;接近：eax = 1 否则eax = 0
-IJudgePolygonEnd            PROTO 
 IAddGraphPoint              PROTO ;将当前点存储进点列
 IGetRectanglePointList      PROTO ;根据点列得到绘制矩形的存储点列
 ICallTextDialog              PROTO :HWND,:UINT,:WPARAM,:LPARAM ;弹出对话框输入文字
@@ -93,20 +90,8 @@ IHandlePainterDialog        PROTO :HWND, :WPARAM, :LPARAM
     IDM_TEXT                WORD 402
     IDM_LINE                WORD 403
     IDM_SOLID_LINE          WORD 4031
-    IDM_DASH_LINE           WORD 4032
-    IDM_DOT_LINE            WORD 4033
-    IDM_DASHDOT_LINE        WORD 4034
-    IDM_DASHDOT2_LINE       WORD 4035
-    IDM_INSIDEFRAME_LINE    WORD 4036
-    IDM_TRIANGLE0           WORD 4040
-    IDM_TRIANGLE1           WORD 4041
     IDM_RECTANGLE           WORD 405
-    IDM_ELLIPSE             WORD 406
-    IDM_POLYGON             WORD 407
     IDM_RECTANGLE_FRAME     WORD 408
-    IDM_TRIANGLE0_FRAME     WORD 4090
-    IDM_TRIANGLE1_FRAME     WORD 4091
-    IDM_POLYGON_FRAME       WORD 410
     ;File
     IDM_SAVE                WORD 411
     IDM_LOAD                WORD 412
@@ -131,15 +116,8 @@ IHandlePainterDialog        PROTO :HWND, :WPARAM, :LPARAM
     IDM_MODE_ERASE           DWORD 501
     IDM_MODE_TEXT            DWORD 502
     IDM_MODE_LINE            DWORD 503
-    IDM_MODE_TRIANGLE0       DWORD 5040
-    IDM_MODE_TRIANGLE1       DWORD 5041
     IDM_MODE_RECTANGLE       DWORD 505
-    IDM_MODE_ELLIPSE         DWORD 506
-    IDM_MODE_POLYGON         DWORD 507
     IDM_MODE_RECTANGLE_FRAME DWORD 508
-    IDM_MODE_TRIANGLE0_FRAME DWORD 5090
-    IDM_MODE_TRIANGLE1_FRAME DWORD 5091
-    IDM_MODE_POLYGON_FRAME   DWORD 510
     IDM_MODE_BACKGROUBD_COLOR DWORD 511
     IDM_MODE_FRAME_COLOR     DWORD 512
     IDM_MODE_FONT            DWORD 513
@@ -153,7 +131,7 @@ IHandlePainterDialog        PROTO :HWND, :WPARAM, :LPARAM
     LoadMenuString           BYTE "打开", 0
     SaveMenuString           BYTE "保存", 0
 
-    DrawMenuString           BYTE "绘图", 0
+    DrawMenuString           BYTE "绘图工具", 0
     PaintMenuString          BYTE "画图", 0
     EraserMenuString         BYTE "橡皮擦", 0
     EraseMenuString          BYTE "擦除", 0
@@ -166,12 +144,12 @@ IHandlePainterDialog        PROTO :HWND, :WPARAM, :LPARAM
     ColorBrushMenuString     BYTE "填充", 0
     ColorPenMenuString       BYTE "线条", 0
 
-    FrameMenuString          BYTE "框架", 0
+    FrameMenuString          BYTE "非填充图形", 0
     LineMenuString           BYTE "直线", 0
     RectangleFrameMenuString BYTE "矩形框", 0
     SolidLineMenuString      BYTE "实线", 0
     PenColorMenuString       BYTE "线条颜色", 0
-    ToolMenuString           BYTE "图形", 0
+    ToolMenuString           BYTE "填充图形", 0
     RectangleMenuString      BYTE "矩形", 0
 
 

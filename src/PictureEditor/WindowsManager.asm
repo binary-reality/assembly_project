@@ -43,45 +43,16 @@ IHandleModeChange PROC USES ebx ecx,
 		mov ecx, IDM_MODE_ERASE
 	.ELSEIF bx == IDM_TEXT ;文字
 		mov ecx, IDM_MODE_TEXT
-	.ELSEIF bx == IDM_SOLID_LINE || bx == IDM_DASH_LINE || bx == IDM_DOT_LINE || bx == IDM_DASHDOT_LINE || bx == IDM_DASHDOT2_LINE || bx == IDM_INSIDEFRAME_LINE;画线
+	.ELSEIF bx == IDM_SOLID_LINE;画线
 		.IF bx == IDM_SOLID_LINE
 			mov ecx, IDM_MODE_LINE
 			push PS_SOLID
-		.ELSEIF bx == IDM_DASH_LINE ;画线
-			mov ecx, IDM_MODE_LINE
-			push PS_DASH
-		.ELSEIF bx == IDM_DOT_LINE ;画线
-			mov ecx, IDM_MODE_LINE
-			push PS_DOT
-		.ELSEIF bx == IDM_DASHDOT_LINE ;画线
-			mov ecx, IDM_MODE_LINE
-			push PS_DASHDOT
-		.ELSEIF bx == IDM_DASHDOT2_LINE ;画线
-			mov ecx, IDM_MODE_LINE
-			push PS_DASHDOTDOT
-		.ELSEIF bx == IDM_INSIDEFRAME_LINE ;画线
-			mov ecx, IDM_MODE_LINE
-			push PS_INSIDEFRAME
 		.ENDIF
 		pop PenStyle
-	.ELSEIF bx == IDM_TRIANGLE0_FRAME ;上三角形边框
-		mov ecx, IDM_MODE_TRIANGLE0_FRAME
-	.ELSEIF bx == IDM_TRIANGLE1_FRAME ;下三角形边框
-		mov ecx, IDM_MODE_TRIANGLE1_FRAME
 	.ELSEIF bx == IDM_RECTANGLE_FRAME ;矩形边框
 		mov ecx, IDM_MODE_RECTANGLE_FRAME
-	.ELSEIF bx == IDM_POLYGON_FRAME ;多边形边框
-		mov ecx, IDM_MODE_POLYGON_FRAME
-	.ELSEIF bx == IDM_TRIANGLE0 ;上三角形
-		mov ecx, IDM_MODE_TRIANGLE0
-	.ELSEIF bx == IDM_TRIANGLE1 ;下三角形
-		mov ecx, IDM_MODE_TRIANGLE1
 	.ELSEIF bx == IDM_RECTANGLE ;矩形
 		mov ecx, IDM_MODE_RECTANGLE
-	.ELSEIF bx == IDM_ELLIPSE ;椭圆
-		mov ecx, IDM_MODE_ELLIPSE
-	.ELSEIF bx == IDM_POLYGON ;多边形
-		mov ecx, IDM_MODE_POLYGON
 	.ELSEIF bx == IDM_BRUSH_COLOR
 		INVOKE IHandleColor, hWnd, 0
 	.ELSEIF bx == IDM_PEN_COLOR
@@ -326,7 +297,6 @@ IHandleMouseMove PROC USES ebx ecx edx,
 	extern CurrentX: DWORD
 	extern CurrentY: DWORD
 	extern CurrentPointNum: DWORD
-	extern WhetherDrawPolygon: DWORD
 	;获取当前位置
 	mov ebx, lParam
 	INVOKE IGetCurrentPoint, ebx
@@ -409,17 +379,6 @@ IHandleButtonUp PROC USES ebx ecx,
 		INVOKE IGetCurrentPoint, ebx
 		INVOKE InvalidateRect, hWnd, ADDR WorkRegion, 0
 
-	.ELSEIF ecx == IDM_MODE_POLYGON || ecx == IDM_MODE_POLYGON_FRAME
-		;多边形或者边框
-		mov ebx, lParam
-		INVOKE IGetCurrentPoint, ebx
-		INVOKE IJudgePolygonEnd
-		.IF WhetherDrawPolygon == 0
-			INVOKE IAddGraphPoint
-		.ENDIF
-		.IF CurrentPointNum >= 2
-			INVOKE InvalidateRect, hWnd, ADDR WorkRegion, 0
-		.ENDIF
 ;这里添加不同的Mode的判断，从而调用Painter.asm中的函数
 	
 	.ELSE
@@ -472,7 +431,7 @@ IHandlePaint PROC USES ecx,
 	push ecx
 	INVOKE BeginPaint, hWnd, ADDR ps
 	mov ecx, CurrentMode
-	.IF ecx == IDM_MODE_DRAW || ecx==IDM_MODE_LINE || ecx==IDM_MODE_RECTANGLE_FRAME || ecx==IDM_MODE_POLYGON_FRAME || ecx==IDM_MODE_TRIANGLE0_FRAME || ecx==IDM_MODE_TRIANGLE1_FRAME
+	.IF ecx == IDM_MODE_DRAW || ecx==IDM_MODE_LINE || ecx==IDM_MODE_RECTANGLE_FRAME
 		push ecx
 		;mov edi, PenWidth
 		INVOKE CreatePen, PenStyle, PenWidth, PenColor
@@ -487,7 +446,7 @@ IHandlePaint PROC USES ecx,
 			INVOKE IPaintRectangleFrame, ps.hdc
 		.ENDIF
 		INVOKE DeleteObject, hPen
-	.ELSEIF ecx == IDM_MODE_RECTANGLE || ecx==IDM_MODE_POLYGON || ecx==IDM_MODE_TRIANGLE0 || ecx==IDM_MODE_TRIANGLE1 || ecx==IDM_MODE_ELLIPSE
+	.ELSEIF ecx == IDM_MODE_RECTANGLE
 		push ecx
 		mov ecx, BrushMode
 		.IF ecx == SOLID_BRUSH

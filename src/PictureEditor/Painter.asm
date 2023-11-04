@@ -16,11 +16,7 @@ public EndX
 public EndY
 public MouseStatus
 public ShowString
-public WhetherDrawPolygon
 public CurrentPointNum
-public CurrentPointListX
-public CurrentPointListY
-public CurrentPointList
 public SameThreshold
 
 .data
@@ -38,17 +34,11 @@ EndY DWORD 0
 ;鼠标状态
 MouseStatus DWORD 0
 
-;画多边形等
-;画多边形是否已经结束
-WhetherDrawPolygon DWORD 0
-
 ;当前使用的点信息
 CurrentPointNum DWORD 0
 CurrentPointListX DWORD 100 DUP(?)
 CurrentPointListY DWORD 100 DUP(?)
 
-;实际画多边形的参数
-CurrentPointList DWORD 200 DUP(?)
 ;判断两点是否接近的Threshold
 SameThreshold DWORD 4
 
@@ -145,76 +135,6 @@ IPaintRectangleFrame PROC hdc:HDC
 	ret
 IPaintRectangleFrame ENDP
 
-;画直角三角形(上方)框函数
-IPaintTriangle0Frame PROC hdc:HDC
-	LOCAL MiddleX:DWORD, MiddleY:DWORD
-	mov edx, DWORD PTR [CurrentPointListX]
-	mov ecx, DWORD PTR [CurrentPointListY]
-	mov esi, DWORD PTR [CurrentPointListX + 4]
-	mov edi, DWORD PTR [CurrentPointListY + 4]
-	.IF ecx < edi
-		mov MiddleY, ecx
-		mov MiddleX, esi
-	.ELSE
-		mov MiddleY, edi
-		mov MiddleX, edx
-	.ENDIF
-	INVOKE MoveToEx, hdc, edx, ecx, NULL
-	mov edx, DWORD PTR [CurrentPointListX + 4]
-	mov ecx, DWORD PTR [CurrentPointListY + 4]
-	INVOKE LineTo, hdc, edx, ecx
-	mov edx, DWORD PTR [CurrentPointListX]
-	mov ecx, DWORD PTR [CurrentPointListY]
-	INVOKE MoveToEx, hdc, edx, ecx, NULL
-	mov edx, MiddleX
-	mov ecx, MiddleY
-	INVOKE LineTo, hdc, edx, ecx
-	mov edx, DWORD PTR [CurrentPointListX + 4]
-	mov ecx, DWORD PTR [CurrentPointListY + 4]
-	INVOKE MoveToEx, hdc, edx, ecx, NULL
-	mov edx, MiddleX
-	mov ecx, MiddleY
-	INVOKE LineTo, hdc, edx, ecx
-	INVOKE MoveToEx, hdc, 0, 0, NULL
-	mov CurrentPointNum, 0
-	ret
-IPaintTriangle0Frame ENDP
-
-;画直角三角形(下方)框函数
-IPaintTriangle1Frame PROC hdc:HDC
-LOCAL MiddleX:DWORD, MiddleY:DWORD
-	mov edx, DWORD PTR [CurrentPointListX]
-	mov ecx, DWORD PTR [CurrentPointListY]
-	mov esi, DWORD PTR [CurrentPointListX + 4]
-	mov edi, DWORD PTR [CurrentPointListY + 4]
-	.IF ecx > edi
-		mov MiddleY, ecx
-		mov MiddleX, esi
-	.ELSE
-		mov MiddleY, edi
-		mov MiddleX, edx
-	.ENDIF
-	INVOKE MoveToEx, hdc, edx, ecx, NULL
-	mov edx, DWORD PTR [CurrentPointListX + 4]
-	mov ecx, DWORD PTR [CurrentPointListY + 4]
-	INVOKE LineTo, hdc, edx, ecx
-	mov edx, DWORD PTR [CurrentPointListX]
-	mov ecx, DWORD PTR [CurrentPointListY]
-	INVOKE MoveToEx, hdc, edx, ecx, NULL
-	mov edx, MiddleX
-	mov ecx, MiddleY
-	INVOKE LineTo, hdc, edx, ecx
-	mov edx, DWORD PTR [CurrentPointListX + 4]
-	mov ecx, DWORD PTR [CurrentPointListY + 4]
-	INVOKE MoveToEx, hdc, edx, ecx, NULL
-	mov edx, MiddleX
-	mov ecx, MiddleY
-	INVOKE LineTo, hdc, edx, ecx
-	INVOKE MoveToEx, hdc, 0, 0, NULL
-	mov CurrentPointNum, 0
-	ret
-IPaintTriangle1Frame ENDP
-
 ;画矩形函数
 IPaintRectangle PROC, hdc:HDC
 	mov edx, DWORD PTR [CurrentPointListX]
@@ -225,83 +145,6 @@ IPaintRectangle PROC, hdc:HDC
 	mov CurrentPointNum, 0
 	ret
 IPaintRectangle ENDP
-
-;画直角三角形(上方)函数
-IPaintTriangle0 PROC hdc:HDC
-	LOCAL MiddleX:DWORD, MiddleY:DWORD
-	mov edx, DWORD PTR [CurrentPointListX]
-	mov ecx, DWORD PTR [CurrentPointListY]
-	mov esi, DWORD PTR [CurrentPointListX + 4]
-	mov edi, DWORD PTR [CurrentPointListY + 4]
-	.IF ecx < edi
-		mov MiddleY, ecx
-		mov MiddleX, esi
-	.ELSE
-		mov MiddleY, edi
-		mov MiddleX, edx
-	.ENDIF
-	mov ebx, OFFSET CurrentPointList
-	mov [ebx], edx
-	add ebx, 4
-	mov [ebx], ecx
-	add ebx, 4
-	mov [ebx], esi
-	add ebx, 4
-	mov [ebx], edi
-	add ebx, 4
-	mov eax, MiddleX
-	mov [ebx], eax
-	add ebx, 4
-	mov eax, MiddleY
-	mov [ebx], eax
-	INVOKE Polygon, hdc, ADDR CurrentPointList, 3
-	mov CurrentPointNum, 0
-	ret
-IPaintTriangle0 ENDP
-
-;画直角三角形(下方)函数
-IPaintTriangle1 PROC hdc:HDC
-	LOCAL MiddleX:DWORD, MiddleY:DWORD
-	mov edx, DWORD PTR [CurrentPointListX]
-	mov ecx, DWORD PTR [CurrentPointListY]
-	mov esi, DWORD PTR [CurrentPointListX + 4]
-	mov edi, DWORD PTR [CurrentPointListY + 4]
-	.IF ecx > edi
-		mov MiddleY, ecx
-		mov MiddleX, esi
-	.ELSE
-		mov MiddleY, edi
-		mov MiddleX, edx
-	.ENDIF
-	mov ebx, OFFSET CurrentPointList
-	mov [ebx], edx
-	add ebx, 4
-	mov [ebx], ecx
-	add ebx, 4
-	mov [ebx], esi
-	add ebx, 4
-	mov [ebx], edi
-	add ebx, 4
-	mov eax, MiddleX
-	mov [ebx], eax
-	add ebx, 4
-	mov eax, MiddleY
-	mov [ebx], eax
-	INVOKE Polygon, hdc, ADDR CurrentPointList, 3
-	mov CurrentPointNum, 0
-	ret
-IPaintTriangle1 ENDP
-
-;画椭圆函数
-IPaintEllipse PROC, hdc:HDC
-	mov edx, DWORD PTR [CurrentPointListX]
-	mov ecx, DWORD PTR [CurrentPointListY]
-	mov ebx, DWORD PTR [CurrentPointListX + 4]
-	mov eax, DWORD PTR [CurrentPointListY + 4]
-	INVOKE Ellipse, hdc, edx, ecx, ebx, eax
-	mov CurrentPointNum, 0
-	ret
-IPaintEllipse ENDP
 
 ;获得当前点信息
 IGetCurrentPoint PROC, Place:DWORD
@@ -317,53 +160,6 @@ IGetCurrentPoint PROC, Place:DWORD
 	pop ebx
 	ret
 IGetCurrentPoint ENDP
-
-;判断多边形是否绘制完毕--已经有三个点以上，最后一个点和第一个点接近重合.
-;接近：eax = 1 否则eax = 0
-IJudgePolygonEnd PROC
-	push edx
-	push ebx
-	push ecx
-	push esi
-	.IF CurrentPointNum < 3
-		mov eax, 0
-	jmp EndJudge
-	.ENDIF
-	mov edx, OFFSET CurrentPointListX
-	mov ecx, [edx]
-	.IF ecx > CurrentX
-		mov esi, ecx
-		sub esi, CurrentX
-	.ELSE
-		mov esi, CurrentX
-		sub esi, ecx
-	.ENDIF
-	.IF esi > SameThreshold
-		mov eax, 0
-		jmp EndJudge
-	.ENDIF
-	mov edx, OFFSET CurrentPointListY
-	mov ecx, [edx]
-	.IF ecx > CurrentY
-		mov esi, ecx
-		sub esi, CurrentY
-	.ELSE
-		mov esi, CurrentY
-		sub esi, ecx
-	.ENDIF
-	.IF esi > SameThreshold
-		mov eax, 0
-		jmp EndJudge
-	.ENDIF
-	mov eax, 1
-EndJudge:
-	mov WhetherDrawPolygon, eax
-	pop esi
-	pop ecx
-	pop ebx
-	pop edx
-	ret
-IJudgePolygonEnd ENDP
 
 ;将当前点存储进点列
 IAddGraphPoint PROC
@@ -394,53 +190,6 @@ IAddGraphPoint PROC
 	pop edx
 	ret
 IAddGraphPoint ENDP
-
-;根据点列得到绘制多边形的存储点列
-;将x，y两个数组转化为连续x，y的数组
-IGetPolygonPointList PROC
-	push esi
-	push edx
-	push ecx
-	push ebx
-	push edi
-	mov esi, 0
-	.WHILE esi < CurrentPointNum
-		mov edx, OFFSET CurrentPointListX
-		add edx, esi
-		add edx, esi
-		add edx, esi
-		add edx, esi
-
-		mov ecx, OFFSET CurrentPointListY
-		add ecx, esi
-		add ecx, esi
-		add ecx, esi
-		add ecx, esi
-		
-		mov ebx, OFFSET CurrentPointList
-		add ebx, esi
-		add ebx, esi
-		add ebx, esi
-		add ebx, esi
-		add ebx, esi
-		add ebx, esi
-		add ebx, esi
-		add ebx, esi
-
-		mov edi, [edx]
-		mov [ebx], edi
-		add ebx, 4
-		mov edi, [ecx]
-		mov [ebx], edi
-		inc esi
-	.ENDW
-	pop edi
-	pop ebx
-	pop ecx
-	pop edx
-	pop esi
-	ret
-IGetPolygonPointList ENDP
 
 ;弹出对话框输入文字
 ICallTextDialog PROC hWnd:HWND, uMsg:UINT, wParam:WPARAM, lParam:LPARAM
