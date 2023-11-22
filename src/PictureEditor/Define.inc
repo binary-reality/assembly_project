@@ -163,27 +163,33 @@ IHandlePainterDialog		PROTO :HWND, :WPARAM, :LPARAM
 
 	; 类名以及程序名字符串
 	ClassName				db "DrawingWinClass", 0
-	AppName					db "画图", 0
+	AppName					db "Painter绘图", 0
 
 	; 菜单字符串
 	FileMenuString			BYTE "文件", 0
 		LoadMenuString			BYTE "打开", 0
 		SaveMenuString			BYTE "保存", 0
 
-	DrawMenuString			BYTE "绘图", 0
+	DrawMenuString			BYTE "绘图工具", 0
 		PaintMenuString			BYTE "画图", 0
+		EraserMenuString		BYTE "橡皮擦", 0
 		EraseMenuString			BYTE "擦除", 0
 		TextMenuString			BYTE "文字", 0
+			InputTextString			BYTE "输入", 0
 		LineSizeString			BYTE "画笔宽度", 0
 		EraserSizeString		BYTE "橡皮擦大小", 0
+		ColorMenuString			BYTE "颜色", 0
+			ColorBrushMenuString	BYTE "填充", 0
+			ColorPenMenuString		BYTE "线条", 0
+		FontMenuString			BYTE "字体", 0
+			FontChooseMenuString	BYTE "选择字体", 0 
 
-	FrameMenuString			BYTE "框架绘制工具", 0
+	FrameMenuString			BYTE "非填充图形", 0
 		LineMenuString			BYTE "直线", 0
 		RectangleFrameMenuString BYTE "矩形框", 0
 		Triangle0FrameMenuString BYTE "直角三角形框（上方）", 0
 		Triangle1FrameMenuString BYTE "直角三角形框（下方）", 0
 		PolygonFrameMenuString	BYTE "多边形框", 0
-		BrushMenuString			BYTE "填充方式", 0
 
 			SolidLineMenuString		BYTE "实线", 0
 			DashLineMenuString		BYTE "段线", 0
@@ -191,6 +197,14 @@ IHandlePainterDialog		PROTO :HWND, :WPARAM, :LPARAM
 			DashDotLineMenuString	BYTE "线、点",0
 			DashDot2LineMenuString	BYTE "线、点、点", 0
 			InsideFrameLineMenuString BYTE "内线宽", 0
+
+	ToolMenuString			BYTE "填充图形", 0
+		RectangleMenuString		BYTE "矩形", 0
+		Triangle0MenuString		BYTE "直角三角形（上方）", 0
+		Triangle1MenuString		BYTE "直角三角形（下方）", 0
+		EllipseMenuString		BYTE "椭圆", 0
+		PolygonMenuString		BYTE "多边形", 0
+		BrushMenuString			BYTE "填充方式", 0
 			SolidBrushMenuString	BYTE "实心", 0
 			BDiagonalBrushMenuString  BYTE "右斜线", 0
 			FDiagonalBrushMenuString  BYTE "左斜线", 0
@@ -198,24 +212,6 @@ IHandlePainterDialog		PROTO :HWND, :WPARAM, :LPARAM
 			CrossBrushMenuString	BYTE "交叉", 0
 			HorizontalBrushMenuString BYTE "平行", 0
 			VerticalBrushMenuString	  BYTE "竖直", 0
-
-
-	ColorMenuString			BYTE "颜色", 0
-		ColorBrushMenuString	BYTE "填充", 0
-		ColorPenMenuString		BYTE "线条", 0
-		
-	
-	FontMenuString			BYTE "字体", 0
-		FontChooseMenuString	BYTE "选择字体", 0 
-
-	ToolMenuString			BYTE "图形绘制工具", 0
-		RectangleMenuString		BYTE "矩形", 0
-		Triangle0MenuString		BYTE "直角三角形（上方）", 0
-		Triangle1MenuString		BYTE "直角三角形（下方）", 0
-		EllipseMenuString		BYTE "椭圆", 0
-		PolygonMenuString		BYTE "多边形", 0
-
-	SettingsMenuString		BYTE "帮助", 0
 
 	PenColor 				DWORD 0ffh
 	PenStyle				DWORD PS_SOLID ;PS_SOLID == 0

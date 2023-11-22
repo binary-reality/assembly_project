@@ -22,18 +22,16 @@ ICreateMenu PROC
 	LOCAL FileMenu: HMENU
 	
 	LOCAL DrawMenu: HMENU
-	
+	LOCAL TextMenu: HMENU
+	LOCAL EraserMenu: HMENU
+
 	LOCAL FrameMenu: HMENU
 	LOCAL LineMenu: HMENU
-	LOCAL BrushMenu: HMENU
+	
 
 	LOCAL ToolMenu: HMENU
-	
+	LOCAL BrushMenu: HMENU
 	LOCAL ColorMenu: HMENU
-	
-	LOCAL FontMenu: HMENU
-	
-	LOCAL SettingsMenu: HMENU
 
 	INVOKE CreateMenu
 	.IF eax == 0
@@ -46,24 +44,23 @@ ICreateMenu PROC
 	
 	INVOKE CreatePopupMenu
 	mov DrawMenu, eax
+	INVOKE CreatePopupMenu
+	mov TextMenu, eax
+	INVOKE CreatePopupMenu
+	mov EraserMenu, eax
 	
 	INVOKE CreatePopupMenu
 	mov FrameMenu, eax
 	INVOKE CreatePopupMenu
 	mov LineMenu, eax
-	INVOKE CreatePopupMenu
-	mov BrushMenu, eax
+
 	INVOKE CreatePopupMenu
 	mov ToolMenu, eax
-	
+	INVOKE CreatePopupMenu
+	mov BrushMenu, eax	
 	INVOKE CreatePopupMenu
 	mov ColorMenu, eax
 	
-	INVOKE CreatePopupMenu
-	mov FontMenu, eax
-	
-	INVOKE CreatePopupMenu
-	mov SettingsMenu, eax
 
 	;AppendMenu是追加新菜单项的函数
 	;FileMenu 文件创建等选项
@@ -73,10 +70,13 @@ ICreateMenu PROC
 	
 	INVOKE AppendMenu, hMenu, MF_POPUP, DrawMenu, ADDR DrawMenuString
 	INVOKE AppendMenu, DrawMenu, MF_STRING, IDM_DRAW, ADDR PaintMenuString
-	INVOKE AppendMenu, DrawMenu, MF_STRING, IDM_ERASE, ADDR EraseMenuString
-	INVOKE AppendMenu, DrawMenu, MF_STRING, IDM_TEXT, ADDR TextMenuString
+	INVOKE AppendMenu, DrawMenu, MF_POPUP, EraserMenu, ADDR EraserMenuString
+	INVOKE AppendMenu, EraserMenu, MF_STRING, IDM_ERASE, ADDR EraseMenuString
+	INVOKE AppendMenu, EraserMenu, MF_STRING, IDM_ERASER_SIZE, ADDR EraserSizeString
+	INVOKE AppendMenu, DrawMenu, MF_POPUP, TextMenu, ADDR TextMenuString
+	INVOKE AppendMenu, TextMenu, MF_STRING, IDM_TEXT, ADDR InputTextString
+	INVOKE AppendMenu, TextMenu, MF_STRING, IDM_FONT, ADDR FontChooseMenuString
 	INVOKE AppendMenu, DrawMenu, MF_STRING, IDM_LINE_SIZE, ADDR LineSizeString
-	INVOKE AppendMenu, DrawMenu, MF_STRING, IDM_ERASER_SIZE, ADDR EraserSizeString
 
 	INVOKE AppendMenu, hMenu, MF_POPUP, FrameMenu, ADDR FrameMenuString
 	INVOKE AppendMenu, FrameMenu, MF_POPUP, LineMenu, ADDR LineMenuString
@@ -114,10 +114,6 @@ ICreateMenu PROC
 	INVOKE AppendMenu, ColorMenu, MF_STRING, IDM_BRUSH_COLOR, ADDR ColorBrushMenuString
 	INVOKE AppendMenu, ColorMenu, MF_STRING, IDM_PEN_COLOR, ADDR ColorPenMenuString
 	
-	INVOKE AppendMenu, hMenu, MF_POPUP, FontMenu, ADDR FontMenuString
-	INVOKE AppendMenu, FontMenu, MF_STRING, IDM_FONT, ADDR FontChooseMenuString
-
-	INVOKE AppendMenu, hMenu, MF_POPUP, SettingsMenu, ADDR SettingsMenuString
 	ret  
 ICreateMenu ENDP
 
