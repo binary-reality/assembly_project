@@ -470,6 +470,7 @@ IHandlePaint PROC USES ecx,
 	local hBrush: HBRUSH
 	extern CurrentMode:DWORD
 	push ecx
+	INVOKE InvalidateRect, hWnd, NULL, FALSE
 	INVOKE BeginPaint, hWnd, ADDR ps
 	mov ecx, CurrentMode
 	.IF ecx == IDM_MODE_DRAW || ecx==IDM_MODE_LINE || ecx==IDM_MODE_RECTANGLE_FRAME || ecx==IDM_MODE_POLYGON_FRAME || ecx==IDM_MODE_TRIANGLE0_FRAME || ecx==IDM_MODE_TRIANGLE1_FRAME
